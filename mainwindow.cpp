@@ -12,14 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui->pushBegin, &QPushButton::clicked, [this]() {
 		int from = ui->spinFrom->value();
 		int to = ui->spinTo->value();
-		if(from < to) {
+		if(from <= to) {
 			ui->plainTextEdit->clear();
 			ui->pushStop->setDisabled(false);
 			ui->pushBegin->setDisabled(true);
 			ui->spinFrom->setDisabled(true);
 			ui->spinTo->setDisabled(true);
 			for(int i = from; i <= to; ++i) {
-				std::unique_ptr p(new UdpListener(i));
+				std::unique_ptr<UdpListener> p(new UdpListener(i));
 				connect(p.get(), &UdpListener::received, [this](QString const& data) {
 					ui->plainTextEdit->appendPlainText(data + "\r\n");
 					ui->plainTextEdit->moveCursor(QTextCursor::End);

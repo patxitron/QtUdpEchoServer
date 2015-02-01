@@ -15,6 +15,7 @@ signals:
 	void received(QString const&);
 
 private:
+	qint16 port_;
 	QUdpSocket sock_;
 };
 

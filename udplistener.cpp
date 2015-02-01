@@ -2,9 +2,10 @@
 
 UdpListener::UdpListener(qint16 port, QObject *parent)
 		:QObject(parent)
+		,port_(port)
 {
 	sock_.bind(QHostAddress::Any, port);
-	connect(&sock_, &QUdpSocket::readPendingDatagrams, [this](){
+	connect(&sock_, &QIODevice::readyRead, [this](){
 		while(sock_.hasPendingDatagrams()) {
 			QByteArray datagram;
 			datagram.resize(sock_.pendingDatagramSize());
@@ -17,8 +18,11 @@ UdpListener::UdpListener(qint16 port, QObject *parent)
 				,&sender_port
 			);
 			sock_.writeDatagram(datagram, sender, sender_port);
-			sendResponse(sender, sender_port, datagram);
-			emit received(QString::fromUtf8(datagram));
+			emit received(
+				QString("%1:%2 -> <%3> %4").arg(sender.toString())
+									  .arg(sender_port).arg(port_)
+									  .arg(QString::fromUtf8(datagram))
+			);
 		}
 	});
 }
