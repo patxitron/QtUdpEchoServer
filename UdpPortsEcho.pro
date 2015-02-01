@@ -23,4 +23,5 @@ HEADERS  += mainwindow.h\
 FORMS    += mainwindow.ui
 
 OTHER_FILES += README.md\
-			.gitignore
+			.gitignore\
+			LICENSE
